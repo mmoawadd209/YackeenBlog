@@ -1,134 +1,99 @@
-﻿@model  YackeenBlog.ViewModels.ArticleViewModel
+﻿@model PagedList.IPagedList<YackeenBlog.Models.Article>
+@using PagedList.Mvc;
+
 
 @{
     ViewBag.Title = "Index";
 }
-        <div class="container mt-5 pt-5">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="my-4">
-                        Yackeen Blog
-                        <small>Articles Collection</small>
-                    </h1>
-                        <form>
-                            <div class="form-row justify-content-between">
-                                <div class="col-md-4">
-                                    <label for="categories">Categories</label>
-                                    <select id="categories" class="form-control mb-4">
-                                        <option selected="selected">Select Category</option>
-                                        @foreach (var cat in Model.Categories)
-                                        {
-                                            <option value="@cat.Id">@cat.Name</option>
-                                        }
-                                    </select>
-                                </div>
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <div class="col-md-4">
-                                        <a href="@Url.Action("create","article")" class="btn mt-4 btn-primary">
-                                            Create New Article
-                                        </a>
-                                    </div>
-                                }
-
-                            </div>
-                        </form>
-                      
-                   
-             
-
-                    <!-- Blog Post -->
-                    <table id="table" class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Posted On</th>                               
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var article in Model.Articles)
+<div class="container mt-5 pt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="my-4">
+                Yackeen Blog
+                <small>Articles Collection</small>
+            </h1>
+            <form>
+                <div class="form-row justify-content-between">
+                    <div class="col-md-4">
+                        <label for="categories">Categories</label>
+                        <select id="categories" class="form-control mb-4">
+                            <option selected="selected">Select Category</option>
+                            @foreach (var cat in ViewBag.Categories)
                             {
-                                <tr>
-                                    <td>
-                                        <a href="@Url.Action("details","article",new { id = article.Id})">
-                                           @article.Title
-                                        </a>
-                                    </td>
-                                    <td>@article.CreatedOn.ToShortDateString()</td>
-                                </tr>
-                             }
-                        </tbody>
+                                <option value="@cat.Id">@cat.Name</option>
+                            }
+                        </select>
+                    </div>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="col-md-4">
+                            <a href="@Url.Action("create","article")" class="btn mt-4 btn-primary">
+                                Create New Article
+                            </a>
+                        </div>
+                    }
 
-                    </table>
                 </div>
-            </div>
+            </form>
+
+
+
+            @using (Html.BeginForm())
+            {
+                <table class="table table-bordered table-hover" >
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.ActionLink("Title", "Index",
+                                new { sortOrder = "Title", CurrentSort = ViewBag.CurrentSort })
+                            </th>
+                            <th>
+                                @Html.ActionLink("CreatedOn", "Index",
+                                new { sortOrder = "CreatedOn", CurrentSort = ViewBag.CurrentSort })
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Title)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                                </td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+                <br />
+                <div id='Paging' style="text-align:center">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+                    of @Model.PageCount
+
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+                </div>
+            }
+</div>
         </div>
+    </div>
 
 
-@section scripts{
-    <script>
-        $(document).ready(function () {
+            @section scripts{
+                <script>
+                    $(document).ready(function () {
 
 
 
 
 
-                //   ajax: {
-                //    url: "/api/articles/0",
-                //    dataSrc:""
-                //},
-                //columns: [
-                //    {
-                //        data: "title",
-                //        render: function (data, type ,article) {
-                //            return "<a href='/articles/details/" + article.id + "'>" + data + "<a/>";
-                //        }
-                //    },
-                //    {
-                //        data:"createdOn"
-                //    }
 
-                //]
-            // $("#categories").on("change", function () {
-
-            //    var selectedCategory = $(this).children("option:selected").val();
-              
-            //     $.ajax({
-            //         url: "api/articles/" + selectedCategory,
-            //        method: "GET",
-            //        success: function (response) {
-
-            //            var HTML = '';
-            //            for (var f = 0; f < response.length; f++) {
-            //                HTML += '<div class="card-body">'
-            //                    +
-            //                    '<h2 class="card-title">'
-            //                    +
-            //                    response[f]['title']
-            //                    +
-            //                        '</h2 ><p class="card-text">'
-            //                    +
-            //                    response[f]['content']
-            //                    +
-            //                        '</p ><a href="#" class="btn btn-primary">Read More &rarr;</a></div><div class="card-footer text-muted">Posted on'
-            //                    +
-            //                    response[f]['createdOn']
-            //                    +
-            //                        'by'
-            //                    +
-            //                    response[f]['createdBy']
-            //                        +
-            //                        '</div>';
-            //            }
-            //            $('#article').html(HTML);
-            //        }
-
-            //    });
-            //});
-
-        });
-    </script>
-}
+                </script>
+            }
 
 
 
@@ -138,116 +103,116 @@
 
 
 
-@*Button trigger modal
-    <button type="button" class="btn btn-primary mb-5" data-toggle="modal" data-target="#exampleModalCenter">
-        Add New Member
-    </button>
+            @*Button trigger modal
+                <button type="button" class="btn btn-primary mb-5" data-toggle="modal" data-target="#exampleModalCenter">
+                    Add New Member
+                </button>
 
-     Modal
+                 Modal
 
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Create Member</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            @Html.TextBoxFor(m => m.Member.Name, new { placeholder = "Member Name", @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            @Html.TextBoxFor(m => m.Member.Title, new { placeholder = "Member Title", @class = "form-control" })
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                        <input hidden id="projectId" value="" name="ProjectId" />
-                    </form>
-
-                </div>
-
-            </div>
-        </div>
-    </div>*@
-
-
-
-@*<section class="hero">
-    <div class="container">
-        <div class="row">
-
-            <div class="col-lg-6 offset-lg-3">
-
-                <div class="cardbox shadow-lg bg-white">
-
-                    <div class="cardbox-heading">
-                         START dropdown
-                        <div class="dropdown float-right">
-                            <button class="btn btn-flat btn-flat-icon" type="button" data-toggle="dropdown" aria-expanded="false">
-                                <em class="fa fa-ellipsis-h"></em>
-                            </button>
-                            <div class="dropdown-menu dropdown-scale dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(-136px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                <a class="dropdown-item" href="#">Hide post</a>
-                                <a class="dropdown-item" href="#">Stop following</a>
-                                <a class="dropdown-item" href="#">Report</a>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Create Member</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                        </div>/ dropdown 
-                        <div class="media m-0">
-                            <div class="d-flex mr-3">
-                                <a href=""><img class="img-fluid rounded-circle" src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/4.jpg" alt="User"></a>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(m => m.Member.Name, new { placeholder = "Member Name", @class = "form-control" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(m => m.Member.Title, new { placeholder = "Member Title", @class = "form-control" })
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                    <input hidden id="projectId" value="" name="ProjectId" />
+                                </form>
+
                             </div>
-                            <div class="media-body">
-                                <p class="m-0">Benjamin Robinson</p>
-                                <small><span><i class="icon ion-md-pin"></i> Nairobi, Kenya</span></small>
-                                <small><span><i class="icon ion-md-time"></i> 10 hours ago</span></small>
-                            </div>
-                        </div>/ media 
-                    </div>/ cardbox-heading 
 
-                    <div class="cardbox-item">
-                        <img class="img-fluid" src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/1.jpg" alt="Image">
-                    </div>/ cardbox-item 
-                    <div class="cardbox-base">
-                        <ul class="float-right">
-                            <li><a><i class="fa fa-comments"></i></a></li>
-                            <li><a><em class="mr-5">12</em></a></li>
-                            <li><a><i class="fa fa-share-alt"></i></a></li>
-                            <li><a><em class="mr-3">03</em></a></li>
-                        </ul>
-                        <ul>
-                            <li><a><i class="fa fa-thumbs-up"></i></a></li>
-                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/3.jpeg" class="img-fluid rounded-circle" alt="User"></a></li>
-                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/1.jpg" class="img-fluid rounded-circle" alt="User"></a></li>
-                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/5.jpg" class="img-fluid rounded-circle" alt="User"></a></li>
-                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/2.jpg" class="img-fluid rounded-circle" alt="User"></a></li>
-                            <li><a><span>242 Likes</span></a></li>
-                        </ul>
-                    </div>/ cardbox-base 
-                    <div class="cardbox-comments">
-                        <span class="comment-avatar float-left">
-                            <a href=""><img class="rounded-circle" src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/6.jpg" alt="..."></a>
-                        </span>
-                        <div class="search">
-                            <input placeholder="Write a comment" type="text">
-                            <button><i class="fa fa-camera"></i></button>
-                        </div>/. Search 
-                    </div>/ cardbox-like 
+                        </div>
+                    </div>
+                </div>*@
 
-                </div>/ cardbox 
 
-            </div>/ col-lg-6 
-            <div class="col-lg-3">
-                <div class="shadow-lg p-4 mb-2 bg-white author">
-                    <a href="http://www.themashabrand.com/">Get more from themashabrand.com</a>
-                    <p>Bootstrap 4.1.0</p>
-                </div>
-            </div>/ col-lg-3 
 
-        </div>/ row 
-    </div>/ container 
-</section>*@
+            @*<section class="hero">
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="col-lg-6 offset-lg-3">
+
+                                <div class="cardbox shadow-lg bg-white">
+
+                                    <div class="cardbox-heading">
+                                         START dropdown
+                                        <div class="dropdown float-right">
+                                            <button class="btn btn-flat btn-flat-icon" type="button" data-toggle="dropdown" aria-expanded="false">
+                                                <em class="fa fa-ellipsis-h"></em>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-scale dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(-136px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                <a class="dropdown-item" href="#">Hide post</a>
+                                                <a class="dropdown-item" href="#">Stop following</a>
+                                                <a class="dropdown-item" href="#">Report</a>
+                                            </div>
+                                        </div>/ dropdown
+                                        <div class="media m-0">
+                                            <div class="d-flex mr-3">
+                                                <a href=""><img class="img-fluid rounded-circle" src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/4.jpg" alt="User"></a>
+                                            </div>
+                                            <div class="media-body">
+                                                <p class="m-0">Benjamin Robinson</p>
+                                                <small><span><i class="icon ion-md-pin"></i> Nairobi, Kenya</span></small>
+                                                <small><span><i class="icon ion-md-time"></i> 10 hours ago</span></small>
+                                            </div>
+                                        </div>/ media
+                                    </div>/ cardbox-heading
+
+                                    <div class="cardbox-item">
+                                        <img class="img-fluid" src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/1.jpg" alt="Image">
+                                    </div>/ cardbox-item
+                                    <div class="cardbox-base">
+                                        <ul class="float-right">
+                                            <li><a><i class="fa fa-comments"></i></a></li>
+                                            <li><a><em class="mr-5">12</em></a></li>
+                                            <li><a><i class="fa fa-share-alt"></i></a></li>
+                                            <li><a><em class="mr-3">03</em></a></li>
+                                        </ul>
+                                        <ul>
+                                            <li><a><i class="fa fa-thumbs-up"></i></a></li>
+                                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/3.jpeg" class="img-fluid rounded-circle" alt="User"></a></li>
+                                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/1.jpg" class="img-fluid rounded-circle" alt="User"></a></li>
+                                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/5.jpg" class="img-fluid rounded-circle" alt="User"></a></li>
+                                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/2.jpg" class="img-fluid rounded-circle" alt="User"></a></li>
+                                            <li><a><span>242 Likes</span></a></li>
+                                        </ul>
+                                    </div>/ cardbox-base
+                                    <div class="cardbox-comments">
+                                        <span class="comment-avatar float-left">
+                                            <a href=""><img class="rounded-circle" src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/6.jpg" alt="..."></a>
+                                        </span>
+                                        <div class="search">
+                                            <input placeholder="Write a comment" type="text">
+                                            <button><i class="fa fa-camera"></i></button>
+                                        </div>/. Search
+                                    </div>/ cardbox-like
+
+                                </div>/ cardbox
+
+                            </div>/ col-lg-6
+                            <div class="col-lg-3">
+                                <div class="shadow-lg p-4 mb-2 bg-white author">
+                                    <a href="http://www.themashabrand.com/">Get more from themashabrand.com</a>
+                                    <p>Bootstrap 4.1.0</p>
+                                </div>
+                            </div>/ col-lg-3
+
+                        </div>/ row
+                    </div>/ container
+                </section>*@

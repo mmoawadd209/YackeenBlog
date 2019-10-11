@@ -1,4 +1,5 @@
 ﻿
+using PagedList;
 using System;
 using System.Linq;
 using System.Net;
@@ -18,19 +19,56 @@ namespace YackeenBlog.Controllers
         {
             unitOfWork = new UnitOfWork();
         }
-
-
-        [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string CurrentSort, int? page)
         {
-            var viewmodel = new ArticleViewModel
+           
+            int pageSize = 10;
+            int pageIndex = 1;
+            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            ViewBag.CurrentSort = sortOrder;
+            sortOrder = String.IsNullOrEmpty(sortOrder) ? "Name" : sortOrder;
+            IPagedList<Article> articles = unitOfWork.Articles.GetAll().ToPagedList(pageIndex, pageSize);
+            switch (sortOrder)
             {
-                Articles = unitOfWork.Articles.GetAll(),
-                Categories = unitOfWork.Categories.GetAll()
-            };
+                case "Title":
+                    if (sortOrder.Equals(CurrentSort))
+                        articles = unitOfWork.Articles.GetAll().OrderByDescending
+                                (m => m.Title).ToPagedList(pageIndex, pageSize);
+                    else
+                        articles = unitOfWork.Articles.GetAll().OrderBy
+                                (m => m.Title).ToPagedList(pageIndex, pageSize);
+                    break;
+                case "CreatedOn":
+                    if (sortOrder.Equals(CurrentSort))
+                        articles = unitOfWork.Articles.GetAll().OrderByDescending
+                                (m => m.CreatedOn).ToPagedList(pageIndex, pageSize);
+                    else
+                        articles = unitOfWork.Articles.GetAll().OrderBy
+                                (m => m.CreatedOn).ToPagedList(pageIndex, pageSize);
+                    break;
+                    
+                case "Default":
+                    articles = unitOfWork.Articles.GetAll().OrderBy
+                        (m => m.Title).ToPagedList(pageIndex, pageSize);
+                    break;
+            }
 
-            return View(viewmodel);
+
+            ViewBag.Categories = unitOfWork.Categories.GetAll();
+            return View(articles);
         }
+
+        //[HttpGet]
+        //public ActionResult Index()
+        //{
+        //    var viewmodel = new ArticleViewModel
+        //    {
+        //        Articles = unitOfWork.Articles.GetAll(),
+        //        Categories = unitOfWork.Categories.GetAll()
+        //    };
+
+        //    return View(viewmodel);
+        //}
 
         [HttpGet]
         public  ActionResult Details(int id)
