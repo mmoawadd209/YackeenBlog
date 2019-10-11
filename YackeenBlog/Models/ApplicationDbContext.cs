@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 namespace YackeenBlog.Models
 {
 
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
 

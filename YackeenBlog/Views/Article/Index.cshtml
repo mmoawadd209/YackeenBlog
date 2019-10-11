@@ -1,0 +1,206 @@
+﻿@model  YackeenBlog.ViewModels.ArticlesListViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+    <div class="container-fluid">
+        <div class="jumbotron">
+            <h5>Yackeen Solutions Technical Task</h5>
+            <p>select a category to view articles.</p>
+        </div>
+        <form>
+            <div class="form-row">
+                <div class="col-md-4">
+                    <label for="categories">Categories</label>
+                    <select id="categories" class="form-control mb-4">
+                        <option selected="selected">Select Category</option>
+                        @foreach (var cat in Model.Categories)
+                        {
+                            <option value="@cat.Id">@cat.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+                          $.ajax({
+                    url: "api/members/0",
+                    method: "GET",
+                    success: function (response) {
+
+                        var trHTML = '';
+                        for (var f = 0; f < response.length; f++) {
+                            trHTML += '<tr><td>'
+                                + response[f]['name']
+                                + '<td>'
+                                + response[f]['createdOn']
+                                + '</td><td>'
+                                + response[f]['id']
+                                + '</td></tr>';
+                        }
+                        $('tbody').html(trHTML);
+                    }
+
+                });
+
+
+             $("#categories").on("change", function () {
+
+                var selectedCategory = $(this).children("option:selected").val();
+              
+                $.ajax({
+                    url: "api/members/" + selectedCategory,
+                    method: "GET",
+                    success: function (response) {
+
+                        var trHTML = '';
+                        for (var f = 0; f < response.length; f++) {
+                            trHTML += '<tr><td>'
+                                + response[f]['name']
+                                + '<td>'
+                                + response[f]['createdOn']
+                                + '</td><td>'
+                                + response[f]['id']
+                                + '</td></tr>';
+                        }
+                        $('tbody').html(trHTML);
+                    }
+
+                });
+            });
+
+        });
+    </script>
+}
+
+
+
+@*Button trigger modal
+    <button type="button" class="btn btn-primary mb-5" data-toggle="modal" data-target="#exampleModalCenter">
+        Add New Member
+    </button>
+
+     Modal
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Create Member</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.Member.Name, new { placeholder = "Member Name", @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.Member.Title, new { placeholder = "Member Title", @class = "form-control" })
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                        <input hidden id="projectId" value="" name="ProjectId" />
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>*@
+
+
+
+@*<section class="hero">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-6 offset-lg-3">
+
+                <div class="cardbox shadow-lg bg-white">
+
+                    <div class="cardbox-heading">
+                         START dropdown
+                        <div class="dropdown float-right">
+                            <button class="btn btn-flat btn-flat-icon" type="button" data-toggle="dropdown" aria-expanded="false">
+                                <em class="fa fa-ellipsis-h"></em>
+                            </button>
+                            <div class="dropdown-menu dropdown-scale dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(-136px, 28px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                <a class="dropdown-item" href="#">Hide post</a>
+                                <a class="dropdown-item" href="#">Stop following</a>
+                                <a class="dropdown-item" href="#">Report</a>
+                            </div>
+                        </div>/ dropdown 
+                        <div class="media m-0">
+                            <div class="d-flex mr-3">
+                                <a href=""><img class="img-fluid rounded-circle" src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/4.jpg" alt="User"></a>
+                            </div>
+                            <div class="media-body">
+                                <p class="m-0">Benjamin Robinson</p>
+                                <small><span><i class="icon ion-md-pin"></i> Nairobi, Kenya</span></small>
+                                <small><span><i class="icon ion-md-time"></i> 10 hours ago</span></small>
+                            </div>
+                        </div>/ media 
+                    </div>/ cardbox-heading 
+
+                    <div class="cardbox-item">
+                        <img class="img-fluid" src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/1.jpg" alt="Image">
+                    </div>/ cardbox-item 
+                    <div class="cardbox-base">
+                        <ul class="float-right">
+                            <li><a><i class="fa fa-comments"></i></a></li>
+                            <li><a><em class="mr-5">12</em></a></li>
+                            <li><a><i class="fa fa-share-alt"></i></a></li>
+                            <li><a><em class="mr-3">03</em></a></li>
+                        </ul>
+                        <ul>
+                            <li><a><i class="fa fa-thumbs-up"></i></a></li>
+                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/3.jpeg" class="img-fluid rounded-circle" alt="User"></a></li>
+                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/1.jpg" class="img-fluid rounded-circle" alt="User"></a></li>
+                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/5.jpg" class="img-fluid rounded-circle" alt="User"></a></li>
+                            <li><a href="#"><img src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/2.jpg" class="img-fluid rounded-circle" alt="User"></a></li>
+                            <li><a><span>242 Likes</span></a></li>
+                        </ul>
+                    </div>/ cardbox-base 
+                    <div class="cardbox-comments">
+                        <span class="comment-avatar float-left">
+                            <a href=""><img class="rounded-circle" src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/6.jpg" alt="..."></a>
+                        </span>
+                        <div class="search">
+                            <input placeholder="Write a comment" type="text">
+                            <button><i class="fa fa-camera"></i></button>
+                        </div>/. Search 
+                    </div>/ cardbox-like 
+
+                </div>/ cardbox 
+
+            </div>/ col-lg-6 
+            <div class="col-lg-3">
+                <div class="shadow-lg p-4 mb-2 bg-white author">
+                    <a href="http://www.themashabrand.com/">Get more from themashabrand.com</a>
+                    <p>Bootstrap 4.1.0</p>
+                </div>
+            </div>/ col-lg-3 
+
+        </div>/ row 
+    </div>/ container 
+</section>*@
