@@ -1,8 +1,8 @@
 ﻿
+using System;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using System.Web.Security;
 using YackeenBlog.Models;
 using YackeenBlog.Repositories;
 using YackeenBlog.ViewModels;
@@ -13,11 +13,10 @@ namespace YackeenBlog.Controllers
     public class ArticleController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly ApplicationDbContext dbContext;
+
         public ArticleController()
         {
             unitOfWork = new UnitOfWork();
-            dbContext = new ApplicationDbContext();
         }
 
 
@@ -34,24 +33,25 @@ namespace YackeenBlog.Controllers
         }
 
         [HttpGet]
-        public ActionResult Details(int id)
+        public  ActionResult Details(int id)
         {
             if (id == 0)            
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var categories = unitOfWork.Categories.GetAll().ToList();
             var article = unitOfWork.Articles.GetArticleWithComments(id);
 
             if (article == null)            
                 return HttpNotFound();
 
-            //var userName = dbContext.Users.FirstOrDefault(x => x.Id == article.CreatedBy).UserName;
 
             var viewModel = new ArticleDetailsViewModel()
             {
                 DomainModel = article,
-                Categories = categories,
-                //AuthorName = userName
+                Categories = unitOfWork.Categories.GetAll().ToList(),
+                CommentModel=new Comment
+                {
+                    ArticleId = article.Id,
+                }
             };
 
             
@@ -82,6 +82,21 @@ namespace YackeenBlog.Controllers
 
                 return RedirectToAction("Index");                   
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Details(ArticleDetailsViewModel viewmodel)
+        {
+
+            viewmodel.CommentModel.CreatedOn = DateTime.Now;
+            unitOfWork.Comments.Add(viewmodel.CommentModel);
+            unitOfWork.Complete();
+
+            return RedirectToAction("Details", "Article", new { id = viewmodel.CommentModel.ArticleId });
+        }
+
+
 
         [HttpGet]
         public ActionResult Edit(int id)

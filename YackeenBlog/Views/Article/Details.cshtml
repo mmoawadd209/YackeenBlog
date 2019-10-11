@@ -23,12 +23,12 @@
                             </div>
                         </div>
                         <div class="post-body">
-                            <p class="lead">@Model.DomainModel.Content.Substring(0,120)</p>
-                            <p>@Model.DomainModel.Content.Substring(121)</p>
+                            <p class="lead">@Model.DomainModel.Content.Substring(0,Model.DomainModel.Content.Length/5)</p>
+                            <p>@Model.DomainModel.Content.Substring(Model.DomainModel.Content.Length/5 +1)</p>
                             <h3>@Model.DomainModel.Title.ToLower()</h3>
                             <p>@Model.DomainModel.Content.</p>
                             <blockquote class="blockquote">
-                                <p>@Model.DomainModel.Content.Substring(150,200)</p>
+                                <p>@Model.DomainModel.Content.Substring(Model.DomainModel.Content.Length/5 ,Model.DomainModel.Content.Length/2)</p>
                                 <footer class="blockquote-footer">
                                     Admin
                                     <cite title="Source Title">Source Title</cite>
@@ -67,11 +67,14 @@
                             <header>
                                 <h3 class="h6">Leave a reply</h3>
                             </header>
-                            <form action="#" class="commenting-form">
+                            <form class="commenting-form" method="post">
+
                                 <div class="row">
                                     <div class="form-group col-md-12">
-                                        <textarea name="usercomment" id="usercomment" placeholder="Type your comment" class="form-control"></textarea>
+                                        @Html.TextAreaFor(x => x.CommentModel.Content, new {placeholder="Type your comment", @class = " form-control" })
                                     </div>
+                                    @Html.AntiForgeryToken()
+                                    @Html.HiddenFor(x=>x.CommentModel.ArticleId)
                                     <div class="form-group col-md-12">
                                         <button type="submit" class="btn btn-secondary">Submit Comment</button>
                                     </div>

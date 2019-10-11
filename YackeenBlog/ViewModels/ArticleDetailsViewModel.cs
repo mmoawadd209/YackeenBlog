@@ -9,11 +9,9 @@ namespace YackeenBlog.ViewModels
     {
         public Article DomainModel { get; set; }
         public List<Category> Categories { get; set; }
-        //public string AuthorName { get; set; }
 
-        public ArticleDetailsViewModel()
-        {
-            Categories = new List<Category>();
-        }
+        public Comment CommentModel { get; set; }
+
+
     }
 }
