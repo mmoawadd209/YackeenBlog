@@ -8,5 +8,7 @@ namespace YackeenBlog.Repositories
     {
         IEnumerable<Article> GetArticlesWithComments();
         IEnumerable<Article> GetArticlesByCategory(int id);
+        Article GetArticleWithComments(int id);
+        IEnumerable<Article> GetLatestArticles();
     }
 }

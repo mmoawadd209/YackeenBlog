@@ -1,26 +1,32 @@
 ﻿
-using System;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Web.Security;
+using YackeenBlog.Models;
 using YackeenBlog.Repositories;
 using YackeenBlog.ViewModels;
 
 namespace YackeenBlog.Controllers
 {
+    [Authorize]
     public class ArticleController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
-        public ArticleController(IUnitOfWork unitOfWork)
+        private readonly ApplicationDbContext dbContext;
+        public ArticleController()
         {
-            this.unitOfWork = unitOfWork;
+            unitOfWork = new UnitOfWork();
+            dbContext = new ApplicationDbContext();
         }
 
 
         [HttpGet]
         public ActionResult Index()
         {
-            var viewmodel = new ArticlesListViewModel
+            var viewmodel = new ArticleViewModel
             {
+                Articles = unitOfWork.Articles.GetAll(),
                 Categories = unitOfWork.Categories.GetAll()
             };
 
@@ -32,21 +38,34 @@ namespace YackeenBlog.Controllers
         {
             if (id == 0)            
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            
-            var article = unitOfWork.Articles.Get(id);
+
+            var categories = unitOfWork.Categories.GetAll().ToList();
+            var article = unitOfWork.Articles.GetArticleWithComments(id);
 
             if (article == null)            
                 return HttpNotFound();
 
-            var viewModel = new ArticleViewModel {DomainModel = article};
+            //var userName = dbContext.Users.FirstOrDefault(x => x.Id == article.CreatedBy).UserName;
 
+            var viewModel = new ArticleDetailsViewModel()
+            {
+                DomainModel = article,
+                Categories = categories,
+                //AuthorName = userName
+            };
+
+            
+            
             return View(viewModel);
         }
 
         [HttpGet]
         public ActionResult Create()
         {
-            var viewModel = new ArticleViewModel();
+            var viewModel = new ArticleViewModel() {
+                DomainModel = new Article(),
+                Categories = unitOfWork.Categories.GetAll()
+            };
 
             return View(viewModel);
         }
@@ -93,7 +112,7 @@ namespace YackeenBlog.Controllers
 
                 article.Title = viewModel.DomainModel.Title;
                 article.Content = viewModel.DomainModel.Content;
-                article.LastEditedOn = DateTime.Now;
+               
 
                 unitOfWork.Complete();
 

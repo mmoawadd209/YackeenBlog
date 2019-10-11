@@ -16,7 +16,7 @@ namespace YackeenBlog.Controllers.APIs
         }
 
     
-
+        [HttpGet]
         public  IEnumerable<Article> GetProjects(int id)
         {          
             var articles = unitOfWork.Articles.GetArticlesByCategory(id);

@@ -5,42 +5,30 @@
 }
 
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Create New Article</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+    <form class="form-block mt-5"  method="post" action="Create">
+        <div class="jumbotron">
+                <div class="form-group col-md-4">
+                    @Html.DropDownListFor(x => x.DomainModel.CategoryId, new SelectList(Model.Categories, "Id", "Name", Model.DomainModel.CategoryId), "select a category", new { @class = "form-control" })
+                </div>                    
+                <div class="form-group col-md-4">
+                    @Html.TextBoxFor(m => m.DomainModel.Title, new {placeholder = "Title", @class = "form-control" })
+                </div>
+        </div>
+        <div class="col-xs-12 pr-5 pl-5">
+            <div class="form-group p-5">
+                @Html.TextAreaFor(x => x.DomainModel.Content, new {rows=5, placeholder = "your text", @class = " form-control" })
+            </div>
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-primary pull-right">submit</button>
+            <div>
+                @Html.ActionLink("Back to List", "Index")
             </div>
         </div>
+    </form>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </div>
-    </div>
-}
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

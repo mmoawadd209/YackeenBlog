@@ -1,6 +1,9 @@
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.Mvc;
 using Unity;
 using Unity.Mvc5;
+using YackeenBlog.Models;
 using YackeenBlog.Repositories;
 
 namespace YackeenBlog
@@ -18,7 +21,7 @@ namespace YackeenBlog
             container.RegisterType<IArticleRepository, ArticleRepository>();
             container.RegisterType<ICategoryRepository, CategoryRepository>();
             container.RegisterType<ICommentRepository, CommentRepository>();
-            
+
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }
     }

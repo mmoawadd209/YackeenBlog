@@ -1,93 +1,140 @@
-﻿@model  YackeenBlog.ViewModels.ArticlesListViewModel
+﻿@model  YackeenBlog.ViewModels.ArticleViewModel
 
 @{
     ViewBag.Title = "Index";
 }
+        <div class="container mt-5 pt-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="my-4">
+                        Yackeen Blog
+                        <small>Articles Collection</small>
+                    </h1>
+                        <form>
+                            <div class="form-row justify-content-between">
+                                <div class="col-md-4">
+                                    <label for="categories">Categories</label>
+                                    <select id="categories" class="form-control mb-4">
+                                        <option selected="selected">Select Category</option>
+                                        @foreach (var cat in Model.Categories)
+                                        {
+                                            <option value="@cat.Id">@cat.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <div class="col-md-4">
+                                        <a href="@Url.Action("create","article")" class="btn mt-4 btn-primary">
+                                            Create New Article
+                                        </a>
+                                    </div>
+                                }
 
-    <div class="container-fluid">
-        <div class="jumbotron">
-            <h5>Yackeen Solutions Technical Task</h5>
-            <p>select a category to view articles.</p>
-        </div>
-        <form>
-            <div class="form-row">
-                <div class="col-md-4">
-                    <label for="categories">Categories</label>
-                    <select id="categories" class="form-control mb-4">
-                        <option selected="selected">Select Category</option>
-                        @foreach (var cat in Model.Categories)
-                        {
-                            <option value="@cat.Id">@cat.Name</option>
-                        }
-                    </select>
+                            </div>
+                        </form>
+                      
+                   
+             
+
+                    <!-- Blog Post -->
+                    <table id="table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Posted On</th>                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var article in Model.Articles)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("details","article",new { id = article.Id})">
+                                           @article.Title
+                                        </a>
+                                    </td>
+                                    <td>@article.CreatedOn.ToShortDateString()</td>
+                                </tr>
+                             }
+                        </tbody>
+
+                    </table>
                 </div>
             </div>
-        </form>
-
-
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <tbody>
-                </tbody>
-            </table>
         </div>
 
-
-    </div>
 
 @section scripts{
     <script>
         $(document).ready(function () {
 
-                          $.ajax({
-                    url: "api/members/0",
-                    method: "GET",
-                    success: function (response) {
-
-                        var trHTML = '';
-                        for (var f = 0; f < response.length; f++) {
-                            trHTML += '<tr><td>'
-                                + response[f]['name']
-                                + '<td>'
-                                + response[f]['createdOn']
-                                + '</td><td>'
-                                + response[f]['id']
-                                + '</td></tr>';
-                        }
-                        $('tbody').html(trHTML);
-                    }
-
-                });
 
 
-             $("#categories").on("change", function () {
 
-                var selectedCategory = $(this).children("option:selected").val();
+
+                //   ajax: {
+                //    url: "/api/articles/0",
+                //    dataSrc:""
+                //},
+                //columns: [
+                //    {
+                //        data: "title",
+                //        render: function (data, type ,article) {
+                //            return "<a href='/articles/details/" + article.id + "'>" + data + "<a/>";
+                //        }
+                //    },
+                //    {
+                //        data:"createdOn"
+                //    }
+
+                //]
+            // $("#categories").on("change", function () {
+
+            //    var selectedCategory = $(this).children("option:selected").val();
               
-                $.ajax({
-                    url: "api/members/" + selectedCategory,
-                    method: "GET",
-                    success: function (response) {
+            //     $.ajax({
+            //         url: "api/articles/" + selectedCategory,
+            //        method: "GET",
+            //        success: function (response) {
 
-                        var trHTML = '';
-                        for (var f = 0; f < response.length; f++) {
-                            trHTML += '<tr><td>'
-                                + response[f]['name']
-                                + '<td>'
-                                + response[f]['createdOn']
-                                + '</td><td>'
-                                + response[f]['id']
-                                + '</td></tr>';
-                        }
-                        $('tbody').html(trHTML);
-                    }
+            //            var HTML = '';
+            //            for (var f = 0; f < response.length; f++) {
+            //                HTML += '<div class="card-body">'
+            //                    +
+            //                    '<h2 class="card-title">'
+            //                    +
+            //                    response[f]['title']
+            //                    +
+            //                        '</h2 ><p class="card-text">'
+            //                    +
+            //                    response[f]['content']
+            //                    +
+            //                        '</p ><a href="#" class="btn btn-primary">Read More &rarr;</a></div><div class="card-footer text-muted">Posted on'
+            //                    +
+            //                    response[f]['createdOn']
+            //                    +
+            //                        'by'
+            //                    +
+            //                    response[f]['createdBy']
+            //                        +
+            //                        '</div>';
+            //            }
+            //            $('#article').html(HTML);
+            //        }
 
-                });
-            });
+            //    });
+            //});
 
         });
     </script>
 }
+
+
+
+
+
+
 
 
 

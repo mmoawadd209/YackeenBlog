@@ -116,15 +116,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Abstractions, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.11.1\lib\net47\Unity.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Container, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.11.1\lib\net47\Unity.Container.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Mvc5, Version=1.4.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.Mvc5.1.4.0\lib\net45\Unity.Mvc5.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -220,6 +211,10 @@
     <Compile Include="Migrations\201910101722352_SeedInitialCategories.Designer.cs">
       <DependentUpon>201910101722352_SeedInitialCategories.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910110503017_SimplifyModelProperties.cs" />
+    <Compile Include="Migrations\201910110503017_SimplifyModelProperties.Designer.cs">
+      <DependentUpon>201910110503017_SimplifyModelProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -240,7 +235,7 @@
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\ArticlesListViewModel.cs" />
+    <Compile Include="ViewModels\ArticleDetailsViewModel.cs" />
     <Compile Include="ViewModels\ArticleViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -250,9 +245,47 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="css\custom.css" />
+    <Content Include="css\fontastic.css" />
+    <Content Include="css\style.blue.css" />
+    <Content Include="css\style.default.css" />
+    <Content Include="css\style.green.css" />
+    <Content Include="css\style.pink.css" />
+    <Content Include="css\style.red.css" />
+    <Content Include="css\style.sea.css" />
+    <Content Include="css\style.violet.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\avatar-1.jpg" />
+    <Content Include="img\avatar-2.jpg" />
+    <Content Include="img\avatar-3.jpg" />
+    <Content Include="img\blog-1.jpg" />
+    <Content Include="img\blog-2.jpg" />
+    <Content Include="img\blog-3.jpg" />
+    <Content Include="img\blog-post-1.jpeg" />
+    <Content Include="img\blog-post-2.jpg" />
+    <Content Include="img\blog-post-3.jpeg" />
+    <Content Include="img\blog-post-4.jpeg" />
+    <Content Include="img\divider-bg.jpg" />
+    <Content Include="img\favicon.ico" />
+    <Content Include="img\featured-pic-1.jpeg" />
+    <Content Include="img\featured-pic-2.jpeg" />
+    <Content Include="img\featured-pic-3.jpeg" />
+    <Content Include="img\gallery-1.jpg" />
+    <Content Include="img\gallery-2.jpeg" />
+    <Content Include="img\gallery-2.jpg" />
+    <Content Include="img\gallery-3.jpg" />
+    <Content Include="img\gallery-4.jpg" />
+    <Content Include="img\hero-bg.jpg" />
+    <Content Include="img\hero.jpg" />
+    <Content Include="img\logo-white.png" />
+    <Content Include="img\logo.png" />
+    <Content Include="img\small-thumbnail-1.jpg" />
+    <Content Include="img\small-thumbnail-2.jpg" />
+    <Content Include="img\small-thumbnail-3.jpg" />
+    <Content Include="img\template-mac.png" />
+    <Content Include="img\user.svg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -294,6 +327,14 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="vendor\fancyapps\fancybox\jquery.fancybox.css" />
+    <Content Include="vendor\fancyapps\fancybox\jquery.fancybox.js" />
+    <Content Include="vendor\fancyapps\fancybox\jquery.fancybox.min.css" />
+    <Content Include="vendor\fancyapps\fancybox\jquery.fancybox.min.js" />
+    <Content Include="vendor\font-awesome\css\font-awesome.css" />
+    <Content Include="vendor\font-awesome\css\font-awesome.min.css" />
+    <Content Include="vendor\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="vendor\font-awesome\HELP-US-OUT.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -339,9 +380,17 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Article\Index.cshtml" />
     <Content Include="Views\Article\Create.cshtml" />
+    <Content Include="Views\Article\Details.cshtml" />
+    <Content Include="vendor\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="vendor\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="vendor\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="vendor\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="vendor\font-awesome\fonts\FontAwesome.otf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="vendor\font-awesome\less\" />
+    <Folder Include="vendor\font-awesome\scss\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -363,6 +412,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910101722352_SeedInitialCategories.resx">
       <DependentUpon>201910101722352_SeedInitialCategories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910110503017_SimplifyModelProperties.resx">
+      <DependentUpon>201910110503017_SimplifyModelProperties.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

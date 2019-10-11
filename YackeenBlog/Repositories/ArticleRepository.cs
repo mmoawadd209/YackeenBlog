@@ -12,6 +12,7 @@ namespace YackeenBlog.Repositories
         public ArticleRepository(DbContext context) 
             : base(context)
         {
+            
         }
 
 
@@ -21,9 +22,17 @@ namespace YackeenBlog.Repositories
             entity.CreatedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
             base.Add(entity);
         }
+        public Article GetArticleWithComments(int id)
+        {
+            return AppDbContext.Articles.Include(p => p.Comments).SingleOrDefault(x=>x.Id ==id);
+        }
         public IEnumerable<Article> GetArticlesWithComments()
         {
             return AppDbContext.Articles.Include(p => p.Comments).ToList();
+        }
+        public IEnumerable<Article> GetLatestArticles()
+        {
+            return AppDbContext.Articles.Take(3);
         }
 
         public IEnumerable<Article> GetArticlesByCategory(int id)

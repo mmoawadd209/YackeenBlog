@@ -13,11 +13,8 @@ namespace YackeenBlog.Models
 
         public Article Article { get; set; }
 
-        [Required]
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
-        public DateTime? LastEditedOn { get; set; }
-        public bool IsDeleted { get; set; }
 
     }
 }

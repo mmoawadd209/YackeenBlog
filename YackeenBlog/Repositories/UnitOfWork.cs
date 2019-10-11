@@ -1,5 +1,6 @@
 ﻿
 
+using System.Data.Entity;
 using YackeenBlog.Models;
 
 namespace YackeenBlog.Repositories
@@ -12,17 +13,19 @@ namespace YackeenBlog.Repositories
         public ICommentRepository Comments { get; private set; }
         public ICategoryRepository Categories { get; private set; }
 
-        public UnitOfWork(ApplicationDbContext context)
+
+        public UnitOfWork()
         {
-            _context = context;
-            Articles = new ArticleRepository(context);
-            Comments = new CommentRepository(context);
-            Categories = new CategoryRepository(context);
+            _context = new ApplicationDbContext();
+            Articles = new ArticleRepository(_context);
+            Comments = new CommentRepository(_context);
+            Categories = new CategoryRepository(_context);
         }
       
 
         public void Complete()
         {
+            
               _context.SaveChanges();
         }
         public void Dispose()
