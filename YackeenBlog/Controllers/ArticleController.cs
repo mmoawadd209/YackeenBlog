@@ -37,7 +37,7 @@ namespace YackeenBlog.Controllers
                     else
                         articles = unitOfWork.Articles.GetAll().OrderBy
                                 (m => m.Title).ToPagedList(pageIndex, pageSize);
-                    break;
+                    break;            
                 case "CreatedOn":
                     if (sortOrder.Equals(CurrentSort))
                         articles = unitOfWork.Articles.GetAll().OrderByDescending
@@ -57,18 +57,6 @@ namespace YackeenBlog.Controllers
             ViewBag.Categories = unitOfWork.Categories.GetAll();
             return View(articles);
         }
-
-        //[HttpGet]
-        //public ActionResult Index()
-        //{
-        //    var viewmodel = new ArticleViewModel
-        //    {
-        //        Articles = unitOfWork.Articles.GetAll(),
-        //        Categories = unitOfWork.Categories.GetAll()
-        //    };
-
-        //    return View(viewmodel);
-        //}
 
         [HttpGet]
         public  ActionResult Details(int id)
