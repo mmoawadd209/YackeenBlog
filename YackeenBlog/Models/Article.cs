@@ -8,6 +8,8 @@ namespace YackeenBlog.Models
     public class Article
     {
         public int Id { get; set; }
+
+
         public int CategoryId { get; set; }
 
         [Required]

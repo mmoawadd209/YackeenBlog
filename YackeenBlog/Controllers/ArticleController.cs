@@ -37,7 +37,15 @@ namespace YackeenBlog.Controllers
                     else
                         articles = unitOfWork.Articles.GetAll().OrderBy
                                 (m => m.Title).ToPagedList(pageIndex, pageSize);
-                    break;            
+                    break;
+                case "CategoryId":
+                    if (sortOrder.Equals(CurrentSort))
+                        articles = unitOfWork.Articles.GetAll().OrderByDescending
+                                (m => m.CategoryId).ToPagedList(pageIndex, pageSize);
+                    else
+                        articles = unitOfWork.Articles.GetAll().OrderBy
+                                (m => m.CategoryId).ToPagedList(pageIndex, pageSize);
+                    break;
                 case "CreatedOn":
                     if (sortOrder.Equals(CurrentSort))
                         articles = unitOfWork.Articles.GetAll().OrderByDescending

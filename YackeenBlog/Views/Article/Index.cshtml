@@ -12,46 +12,36 @@
                 Yackeen Blog
                 <small>Articles Collection</small>
             </h1>
-            <form>
-                <div class="form-row justify-content-between">
-                    <div class="col-md-4">
-                        <label for="categories">Categories</label>
-                        <select id="categories" class="form-control mb-4">
-                            <option selected="selected">Select Category</option>
-                            @foreach (var cat in ViewBag.Categories)
-                            {
-                                <option value="@cat.Id">@cat.Name</option>
-                            }
-                        </select>
-                    </div>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <div class="col-md-4">
-                            <a href="@Url.Action("create","article")" class="btn mt-4 btn-primary">
-                                Create New Article
-                            </a>
-                        </div>
-                    }
+            <p class="ml-5 text-gray">  You can sort articles by clicking on any header</p>
+            
 
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="col-md-4 m-5">
+                    <a href="@Url.Action("create","article")" class="btn mt-4 btn-primary">
+                        Create New Article
+                    </a>
                 </div>
-            </form>
-
-
-
+            }
             @using (Html.BeginForm())
             {
-                <table class="table table-bordered table-hover" >
+                <table id="articles" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>
                                 @Html.ActionLink("Title", "Index",
-                                new { sortOrder = "Title", CurrentSort = ViewBag.CurrentSort})
+                                new { sortOrder = "Title", CurrentSort = ViewBag.CurrentSort })
+                            </th>
+                            <th>
+                                @Html.ActionLink("Category", "Index",
+                                new { sortOrder = "CategoryId", CurrentSort = ViewBag.CurrentSort })
                             </th>
                             <th>
 
                                 @Html.ActionLink("Posted On", "Index",
-                                new { sortOrder = "CreatedOn", CurrentSort = ViewBag.CurrentSort})
+                                new { sortOrder = "CreatedOn", CurrentSort = ViewBag.CurrentSort })
                             </th>
+
 
                         </tr>
                     </thead>
@@ -60,7 +50,12 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Title)
+                                    @Html.ActionLink(item.Title, "Details",
+                                        new { id = item.Id })
+                                </td>
+                                <td>
+                                    @Enum.GetName(typeof(YackeenBlog.Models.CategoriesEnum), item.CategoryId)
+
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CreatedOn)
@@ -79,8 +74,7 @@
                     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
                 </div>
             }
-</div>
         </div>
     </div>
-
+</div>
 

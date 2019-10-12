@@ -189,7 +189,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\APIs\ArticlesController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -221,10 +220,15 @@
     <Compile Include="Migrations\201910110503017_SimplifyModelProperties.Designer.cs">
       <DependentUpon>201910110503017_SimplifyModelProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910120212119_SeedSomeDummyArticles.cs" />
+    <Compile Include="Migrations\201910120212119_SeedSomeDummyArticles.Designer.cs">
+      <DependentUpon>201910120212119_SeedSomeDummyArticles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Article.cs" />
+    <Compile Include="Models\CategoriesEnum.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -423,6 +427,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910110503017_SimplifyModelProperties.resx">
       <DependentUpon>201910110503017_SimplifyModelProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910120212119_SeedSomeDummyArticles.resx">
+      <DependentUpon>201910120212119_SeedSomeDummyArticles.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
